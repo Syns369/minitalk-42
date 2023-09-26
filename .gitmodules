@@ -1,0 +1,3 @@
+[submodule "libft-42"]
+	path = libft-42
+	url = https://github.com/Syns369/libft-42.git
