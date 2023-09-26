@@ -1,4 +1,5 @@
-NAME = minitalk
+NAMECL = client
+NAMESV = server
 
 LIBFT_DIR = libft-42/
 
@@ -16,18 +17,25 @@ CFLAGS = -Wall -Werror -Wextra
 
 RM = rm -rf
 
-SRC_FILES = main\
+SRC_CLIENT_FILES = client
+SRC_SERVER_FILES = server
 
-SRCS = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
-OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
+SRCS_CLIENT = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_CLIENT_FILES)))
+OBJS_CLIENT = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_CLIENT_FILES)))
 
-all: $(NAME)
+SRCS_SERVER = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_SERVER_FILES)))
+OBJS_SERVER = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_SERVER_FILES)))
+
+all: $(NAMECL) $(NAMESV)
 
 $(LIBFT):
 	@make all -C $(LIBFT_DIR)
 
-$(NAME):	$(OBJS) $(LIBFT)
-			$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lm
+$(NAMECL):	$(OBJS_CLIENT) $(LIBFT)
+			$(CC) $(CFLAGS) -o $(NAMECL) $(OBJS_CLIENT) $(LIBFT)
+
+$(NAMESV):	$(OBJS_SERVER) $(LIBFT)
+			$(CC) $(CFLAGS) -o $(NAMESV) $(OBJS_SERVER) $(LIBFT)
 
 $(OBJ_DIR)%.o:	$(SRC_DIR)%.c minitalk.h | $(OBJ_DIR)
 				$(CC) $(CFLAGS) -c $< -o $@

@@ -1,21 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jdarcour <jdarcour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/26 15:39:59 by jdarcour          #+#    #+#             */
-/*   Updated: 2023/09/26 18:24:24 by jdarcour         ###   ########.fr       */
+/*   Created: 2023/09/26 18:22:24 by jdarcour          #+#    #+#             */
+/*   Updated: 2023/09/26 18:27:46 by jdarcour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "../minitalk.h"
 
-# include "libft-42/libft.h"
+void	send_message(int pid, char *message)
+{
+	(void)message;
+	kill(pid, SIGUSR1);
+}
 
-# include <signal.h>
-# include <unistd.h>
+int	main(int argc, char **argv)
+{
+	int	pid;
 
-#endif
+	if (argc != 3)
+	{
+		ft_printf("Usage: ./client [pid] [message]\n");
+		return (0);
+	}
+	pid = ft_atoi(argv[1]);
+	ft_printf("Sending message to %d\n", pid);
+	send_message(pid, argv[2]);
+	return (0);
+}
