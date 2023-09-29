@@ -6,7 +6,7 @@
 /*   By: jdarcour <jdarcour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 15:40:50 by jdarcour          #+#    #+#             */
-/*   Updated: 2023/09/29 15:37:37 by jdarcour         ###   ########.fr       */
+/*   Updated: 2023/09/29 19:01:17 by jdarcour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	handle_length(t_data *data, int signum)
 	}
 }
 
-void	handle_message(t_data *data, int signum)
+void	handle_message(t_data *data, int signum, siginfo_t *info)
 {
 	data->c |= (signum == SIGUSR1);
 	data->i++;
@@ -50,6 +50,7 @@ void	handle_message(t_data *data, int signum)
 			ft_putstr_fd("Received message: ", 1);
 			ft_putstr_fd(data->buffer, 1);
 			ft_putchar_fd('\n', 1);
+			kill(info->si_pid, SIGUSR2);
 			free(data->buffer);
 			data->buffer = NULL;
 			data->bit_count = 0;
@@ -68,24 +69,29 @@ void	handle_message(t_data *data, int signum)
 		data->c <<= 1;
 }
 
-void	handler(int signum)
+void	handler(int signum, siginfo_t *info, void *context)
 {
 	static t_data	data;
 
+	(void)context;
 	if (signum == SIGINT)
 		handle_sigint(data.buffer);
 	if (data.bit_count < 32)
 		handle_length(&data, signum);
 	else
-		handle_message(&data, signum);
+		handle_message(&data, signum, info);
+	if (signum == SIGUSR1)
+		kill(info->si_pid, SIGUSR1);
+	else if (signum == SIGUSR2)
+		kill(info->si_pid, SIGUSR1);
 }
 
 int	main(void)
 {
 	struct sigaction	sa;
 
-	sa.sa_handler = handler;
-	sa.sa_flags = 0;
+	sa.sa_sigaction = &handler;
+	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
 	ft_printf("Server PID: %d\n", getpid());
 	sigaction(SIGUSR1, &sa, NULL);
