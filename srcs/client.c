@@ -6,7 +6,7 @@
 /*   By: jdarcour <jdarcour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 18:22:24 by jdarcour          #+#    #+#             */
-/*   Updated: 2023/09/28 16:07:52 by jdarcour         ###   ########.fr       */
+/*   Updated: 2023/09/29 15:25:35 by jdarcour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	main(int argc, char **argv)
 	ft_printf("Sending message to %d\n", pid);
 	message_len = ft_strlen(message);
 	send_len(pid, message_len);
-	usleep(100);
+	// usleep(100);
 	i = 0;
 	while (message[i])
 	{

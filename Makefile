@@ -48,7 +48,7 @@ clean:
 	$(RM) $(OBJ_DIR)
 
 fclean: clean
-	$(RM) $(NAME)
+	$(RM) $(NAMECL) $(NAMESV)
 	make fclean -C $(LIBFT_DIR)
 
 re: fclean all
