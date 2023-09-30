@@ -6,7 +6,7 @@
 /*   By: jdarcour <jdarcour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 15:40:50 by jdarcour          #+#    #+#             */
-/*   Updated: 2023/09/29 19:01:17 by jdarcour         ###   ########.fr       */
+/*   Updated: 2023/09/30 12:51:10 by jdarcour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,7 @@ void	handle_message(t_data *data, int signum, siginfo_t *info)
 	{
 		if (data->c == '\0')
 		{
-			ft_putstr_fd("Received message: ", 1);
-			ft_putstr_fd(data->buffer, 1);
-			ft_putchar_fd('\n', 1);
+			ft_printf("Received message: %s\n", data->buffer);
 			kill(info->si_pid, SIGUSR2);
 			free(data->buffer);
 			data->buffer = NULL;

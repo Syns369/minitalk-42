@@ -6,7 +6,7 @@
 /*   By: jdarcour <jdarcour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 18:22:24 by jdarcour          #+#    #+#             */
-/*   Updated: 2023/09/29 19:04:39 by jdarcour         ###   ########.fr       */
+/*   Updated: 2023/09/30 12:52:35 by jdarcour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	send_char(int pid, unsigned char character)
 		while (!g_pause)
 			usleep(1);
 		g_pause = 0;
-		// usleep(100);
 	}
 }
 
@@ -51,7 +50,6 @@ int	send_len(int pid, int len)
 		while (!g_pause)
 			usleep(1);
 		g_pause = 0;
-		// usleep(100);
 		i--;
 	}
 	return (0);
@@ -72,11 +70,23 @@ void	receive_handler(int signum)
 	}
 }
 
+void	send_message(int pid, char *message)
+{
+	int	i;
+
+	i = 0;
+	while (message[i])
+	{
+		send_char(pid, (unsigned char)message[i]);
+		i++;
+	}
+	send_char(pid, (unsigned char) '\0');
+}
+
 int	main(int argc, char **argv)
 {
 	int					pid;
 	char				*message;
-	int					i;
 	int					message_len;
 	struct sigaction	sa;
 
@@ -85,7 +95,6 @@ int	main(int argc, char **argv)
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-
 	if (argc != 3)
 	{
 		ft_printf("Usage: ./client [pid] [message]\n");
@@ -96,12 +105,6 @@ int	main(int argc, char **argv)
 	ft_printf("Sending message to %d\n", pid);
 	message_len = ft_strlen(message);
 	send_len(pid, message_len);
-	i = 0;
-	while (message[i])
-	{
-		send_char(pid, (unsigned char)message[i]);
-		i++;
-	}
-	send_char(pid, (unsigned char) '\0');
+	send_message(pid, message);
 	return (0);
 }
